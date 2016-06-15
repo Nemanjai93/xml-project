@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" elementFormDefault="qualified"
+    targetNamespace="http://www.system.rs/scheme" xmlns="http://www.system.rs/scheme">
+
+    <xs:include schemaLocation="Korisnik.xsd"/>
+    <xs:include schemaLocation="Propis.xsd"/>
+    <xs:element name="Amandman">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="NazivAmandmana">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:pattern value="AMANDMAN [1-9][0-9]*"/>
+                            <xs:minLength value="10"/>
+                            <xs:maxLength value="16"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:element name="Modifikacija">
+                    <xs:complexType>
+                        <xs:attribute ref="ID" use="required"/>
+                        <xs:attribute name="TipModifikacije" use="required">
+                            <xs:simpleType>
+                                <xs:restriction base="xs:string">
+                                    <xs:enumeration value="Brisanje"/>
+                                    <xs:enumeration value="Izmena"/>
+                                    <xs:enumeration value="Dodavanje"/>
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:attribute>
+                        <xs:attribute name="PredmetModifikacije" type="xs:IDREF" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+            <xs:attribute ref="ID" use="required"/>
+            <xs:attribute name="VremePodnosenja" type="xs:dateTime" use="required"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="PravniOsnov">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="Korisnik"/>
+                <xs:element name="SadrzajOsnova" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

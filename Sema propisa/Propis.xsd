@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" elementFormDefault="qualified"
+    targetNamespace="http://www.system.rs/scheme" xmlns="http://www.system.rs/scheme">
+    <xs:include schemaLocation="Korisnik.xsd"/>
+    <xs:attribute name="ID">
+        <xs:simpleType>
+            <xs:restriction base="xs:ID">
+                <xs:pattern value="\i\c*"/>
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="RedniBroj">
+        <xs:simpleType>
+            <xs:restriction base="xs:int">
+                <xs:pattern value="[\-+]?[0-9]+"/>
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:attribute>
+    <xs:element name="Propis">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="0" ref="Preambula"/>
+                <xs:element name="NazivPropisa">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:pattern value="[A-Z]{1,300}"/>
+                            <xs:minLength value="1"/>
+                            <xs:maxLength value="300"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:choice>
+                    <xs:element maxOccurs="unbounded" ref="Deo"/>
+                    <xs:element maxOccurs="unbounded" ref="Glava"/>
+                    <xs:element maxOccurs="20" minOccurs="2" ref="Clan"/>
+                </xs:choice>
+                <xs:element minOccurs="0" name="Prilog" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Preambula">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="PravniOsnov" type="xs:string"/>
+                <xs:element ref="Korisnik"/>
+                <xs:element minOccurs="0" ref="Saglasnost"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Saglasnost">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="Korisnik"/>
+                <xs:element name="NaznakaSaglasnosti" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Deo">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="NazivDela">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:minLength value="1"/>
+                            <xs:maxLength value="20"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:element maxOccurs="unbounded" minOccurs="2" ref="Glava"/>
+            </xs:sequence>
+            <xs:attribute ref="ID" use="required"/>
+            <xs:attribute ref="RedniBroj" use="required"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Glava">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="NazivGlave">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:minLength value="1"/>
+                            <xs:maxLength value="200"/>
+                            <xs:pattern value="[A-Z]{1,300}"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:element ref="Odejlak"/>
+            </xs:sequence>
+            <xs:attribute ref="ID" use="required"/>
+            <xs:attribute ref="RedniBroj" use="required"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Odejlak">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="NazivOdeljka">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:minLength value="1"/>
+                            <xs:maxLength value="100"/>
+                            <xs:pattern value="[1-9][0-9]*\. [A-Za-z]*"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:choice>
+                    <xs:element maxOccurs="unbounded" ref="Pododeljak"/>
+                    <xs:element maxOccurs="unbounded" ref="Clan"/>
+                </xs:choice>
+            </xs:sequence>
+            <xs:attribute ref="ID" use="required"/>
+            <xs:attribute ref="RedniBroj" use="required"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Pododeljak">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="NazivPododeljka">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:minLength value="1"/>
+                            <xs:maxLength value="100"/>
+                            <xs:pattern value="\([a-z]\) [A-Za-z]*"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:element maxOccurs="unbounded" ref="Clan"/>
+            </xs:sequence>
+            <xs:attribute ref="ID" use="required"/>
+            <xs:attribute ref="RedniBroj" use="required"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Clan">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="NazivClana">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:minLength value="1"/>
+                            <xs:maxLength value="100"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:element name="OznakaClana">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:minLength value="6"/>
+                            <xs:maxLength value="12"/>
+                            <xs:pattern value="Clan [1-9][0-9]*"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:choice>
+                    <xs:element name="SadrzajClana" type="xs:string"/>
+                    <xs:element maxOccurs="unbounded" ref="Stav"/>
+                </xs:choice>
+            </xs:sequence>
+            <xs:attribute ref="ID" use="required"/>
+            <xs:attribute ref="RedniBroj" use="required"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Stav">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="SadrzajStava" type="xs:string"/>
+                <xs:element maxOccurs="unbounded" minOccurs="2" ref="Tacka"/>
+            </xs:sequence>
+            <xs:attribute ref="ID" use="required"/>
+            <xs:attribute ref="RedniBroj" use="required"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Tacka">
+        <xs:complexType>
+            <xs:choice>
+                <xs:element name="SadrzajTacke" type="xs:string"/>
+                <xs:element maxOccurs="unbounded" minOccurs="2" ref="Podtacka"/>
+            </xs:choice>
+            <xs:attribute ref="ID" use="required"/>
+            <xs:attribute ref="RedniBroj" use="required"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Podtacka">
+        <xs:complexType>
+            <xs:choice>
+                <xs:element name="SadrzajPodtacke" type="xs:string"/>
+                <xs:element maxOccurs="unbounded" minOccurs="2" name="Alineja">
+                    <xs:complexType>
+                        <xs:simpleContent>
+                            <xs:extension base="xs:string">
+                                <xs:attribute ref="ID" use="required"/>
+                            </xs:extension>
+                        </xs:simpleContent>
+                    </xs:complexType>
+                </xs:element>
+            </xs:choice>
+            <xs:attribute ref="ID" use="required"/>
+            <xs:attribute ref="RedniBroj" use="required"/>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>
